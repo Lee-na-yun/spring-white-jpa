@@ -4,9 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
+import site.metacoding.white.domain.User;
+import site.metacoding.white.dto.BoardRequestDto.BoardSaveDto;
 import site.metacoding.white.service.BoardService;
 
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class BoardApiController {
 
     private final BoardService boardService;
+    private final HttpSession session;
 
     @GetMapping("/board")
     public List<Board> findAll() {
@@ -43,9 +48,20 @@ public class BoardApiController {
         return boardService.findById(id);
     }
 
-    @PostMapping("/board")
-    public String save(@RequestBody Board board) {
-        boardService.save(board);
+    /*
+     * @PostMapping("/board")
+     * public String save(@RequestBody Board board) {
+     * boardService.save(board);
+     * return "ok";
+     * }
+     */
+
+    @PostMapping("/v2/board")
+    public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
+        User principal = (User) session.getAttribute("principal");
+        boardSaveDto.newInstance();
+        boardSaveDto.getServiceDto().setUser(principal);
+        boardService.save(boardSaveDto); // 컨트롤러는 entity를 알 필요가 없으므로 dto 그대로 넘기기
         return "ok";
     }
 
