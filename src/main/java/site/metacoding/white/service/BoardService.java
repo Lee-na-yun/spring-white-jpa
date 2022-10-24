@@ -25,12 +25,17 @@ public class BoardService {
         Board board = new Board();
         board.setTitle(boardSaveDto.getTitle());
         board.setContent(boardSaveDto.getContent());
-        board.setUser(boardSaveDto.getServiceDto().getUser());
+        board.setUser(boardSaveDto.getUser());
         boardRepository.save(board); // 여기서는 entity로 받아야함
     }
 
+    @Transactional(readOnly = true) // 세션 종료 안됨
     public Board findById(Long id) {
-        return boardRepository.findById(id);
+        Board boardPS = boardRepository.findById(id); // 오픈인뷰가 false니까 조회후 세션 종료
+        boardPS.getUser().getUsername(); // Lazy 로딩됨. ( Eager이면 이미 로딩되서 select 두번)
+        // 4. user select 됨?
+        System.out.println("서비스단에서 지연로딩 함. 왜? 여기까지는 디비커넥션이 유지되니까!");
+        return boardPS;
     }
 
     @Transactional // select아니라서 붙여야함!

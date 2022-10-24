@@ -56,11 +56,23 @@ public class BoardApiController {
      * }
      */
 
+    @GetMapping("/v2/board/{id}")
+    public String findByIdV2(@PathVariable Long id) {
+        System.out.println("현재 open-in-view는 true 인가 false 인가 생각해보기!!");
+        Board boardPS = boardService.findById(id);
+        System.out.println("board.id : " + boardPS.getId());
+        System.out.println("board.title : " + boardPS.getTitle());
+        System.out.println("board.content : " + boardPS.getContent());
+        System.out.println("open-in-view가 false이면 Lazy 로딩 못함");
+
+        // 날라감)
+        return "ok";
+    }
+
     @PostMapping("/v2/board")
     public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
         User principal = (User) session.getAttribute("principal");
-        boardSaveDto.newInstance();
-        boardSaveDto.getServiceDto().setUser(principal);
+        boardSaveDto.setUser(principal);
         boardService.save(boardSaveDto); // 컨트롤러는 entity를 알 필요가 없으므로 dto 그대로 넘기기
         return "ok";
     }

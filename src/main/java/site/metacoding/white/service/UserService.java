@@ -29,8 +29,8 @@ public class UserService {
         if (userPS.getPassword().equals(user.getPassword())) {
             return userPS;
         } else {
-            throw new IllegalArgumentException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
+            throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
         }
-    }
+    } // 트랜잭션 종료
 
 }

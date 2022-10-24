@@ -23,6 +23,6 @@ public class Board {
     private String content;
 
     // FK가 만들어짐 = user_id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user; // fk
 }
