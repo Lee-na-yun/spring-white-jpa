@@ -29,7 +29,7 @@ public class BoardService {
     public BoardSaveRespDto save(BoardSaveReqDto boardSaveReqDto) {
 
         // 핵심 로직
-        Board boardPS = boardRepository.save(boardSaveReqDto.toEntity())
+        Board boardPS = boardRepository.save(boardSaveReqDto.toEntity());
 
         // DTO 전환
         BoardSaveRespDto boardSaveRespDto = new BoardSaveRespDto(boardPS);
@@ -41,7 +41,6 @@ public class BoardService {
     public Board findById(Long id) {
         Board boardPS = boardRepository.findById(id); // 오픈인뷰가 false니까 조회후 세션 종료
         boardPS.getUser().getUsername(); // Lazy 로딩됨. ( Eager이면 이미 로딩되서 select 두번)
-        // 4. user select 됨?
         System.out.println("서비스단에서 지연로딩 함. 왜? 여기까지는 디비커넥션이 유지되니까!");
         return boardPS;
     }

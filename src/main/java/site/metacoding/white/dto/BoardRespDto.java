@@ -3,6 +3,7 @@ package site.metacoding.white.dto;
 import lombok.Getter;
 import lombok.Setter;
 import site.metacoding.white.domain.Board;
+import site.metacoding.white.domain.User;
 
 public class BoardRespDto {
 
@@ -19,6 +20,11 @@ public class BoardRespDto {
         public static class UserDto {
             private Long id;
             private String username;
+
+            public UserDto(User user) {
+                this.id = user.getId();
+                this.username = user.getUsername();
+            }
         }
 
         public BoardSaveRespDto(Board board) {
