@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.BoardRepository;
+import site.metacoding.white.domain.User;
+import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
 
 // 서비스의 역할
@@ -19,13 +21,15 @@ import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Transactional // 꼭 붙이기! jpa는 자동으로 트랜젝션이 안걸리기 때문
     public void save(BoardSaveReqDto boardSaveReqDto) {
+        User userPS = userRepository.findById(boardSaveReqDto.getSessionUser().getId());
         Board board = new Board();
         board.setTitle(boardSaveReqDto.getTitle());
         board.setContent(boardSaveReqDto.getContent());
-        board.setUser(boardSaveReqDto.getUser());
+        board.setUser(userPS);
         boardRepository.save(board); // 여기서는 entity로 받아야함
     }
 

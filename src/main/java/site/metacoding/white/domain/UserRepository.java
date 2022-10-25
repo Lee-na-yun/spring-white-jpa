@@ -27,4 +27,10 @@ public class UserRepository {
                 .getSingleResult();
     } // 쿼리에는 테이블을 대문자로 쓰고, 별칭을 꼭 넣어줘야 함!
 
+    public User findById(Long id) {
+        return em.createQuery("select u from User u where u.id = :id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
 }

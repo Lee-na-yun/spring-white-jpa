@@ -11,7 +11,7 @@ public class BoardRequestDto {
     public static class BoardSaveReqDto { // 게시글쓰기dto
         private String title;
         private String content;
-        private User user; // 서비스 로직
+        private SessionUser sessionUser; // 서비스 로직
     }
 
     // 필요한 dto는 이 파일에 추가로 작성하기!
