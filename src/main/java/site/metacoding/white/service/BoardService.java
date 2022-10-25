@@ -27,22 +27,13 @@ public class BoardService {
 
     @Transactional // 꼭 붙이기! jpa는 자동으로 트랜젝션이 안걸리기 때문
     public BoardSaveRespDto save(BoardSaveReqDto boardSaveReqDto) {
-        User userPS = userRepository.findById(boardSaveReqDto.getSessionUser().getId());
-        Board board = new Board();
-        board.setTitle(boardSaveReqDto.getTitle());
-        board.setContent(boardSaveReqDto.getContent());
-        board.setUser(userPS); // 영속화된 것 넣기
-        Board boardPS = boardRepository.save(board); // 여기서는 entity로 받아야함
 
-        BoardSaveRespDto boardSaveRespDto = new BoardSaveRespDto();
-        boardSaveRespDto.setId(boardPS.getId());
-        boardSaveRespDto.setTitle(boardPS.getTitle());
-        boardSaveRespDto.setContent(boardPS.getContent());
-        User user = boardPS.getUser();
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setUsername(user.getUsername());
-        boardSaveRespDto.setUser(userDto);
+        // 핵심 로직
+        Board boardPS = boardRepository.save(boardSaveReqDto.toEntity())
+
+        // DTO 전환
+        BoardSaveRespDto boardSaveRespDto = new BoardSaveRespDto(boardPS);
+
         return boardSaveRespDto;
     }
 
@@ -58,8 +49,7 @@ public class BoardService {
     @Transactional // select아니라서 붙여야함!
     public void update(Long id, Board board) {
         Board boardPS = boardRepository.findById(id); // 영속화 됨 => PC에 board가 들어가있음
-        boardPS.setTitle(board.getTitle());
-        boardPS.setContent(board.getContent());
+        boardPS.update(board.getTitle(), board.getContent());
         // boardPS.setAuthor(board.getAuthor()); // 영속화된 데이터를 수정함
     } // 트랜잭션 종료시 ==> 더티체킹을 함
 
