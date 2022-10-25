@@ -59,13 +59,11 @@ public class BoardApiController {
         System.out.println("board.title : " + boardPS.getTitle());
         System.out.println("board.content : " + boardPS.getContent());
         System.out.println("open-in-view가 false이면 Lazy 로딩 못함");
-
-        // 날라감)
         return "ok";
     }
 
     @PostMapping("/board")
-    public String saveV2(@RequestBody BoardSaveReqDto boardSaveReqDto) {
+    public String save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         boardSaveReqDto.setSessionUser(sessionUser);
         boardService.save(boardSaveReqDto); // 컨트롤러는 entity를 알 필요가 없으므로 dto 그대로 넘기기

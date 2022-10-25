@@ -15,9 +15,10 @@ public class BoardRepository {
     // EntityManager = prepareStatement랑 비슷
     private final EntityManager em;
 
-    public void save(Board board) {
+    public Board save(Board board) { // 비영속화
         // 인터페이스가 아니기 때문에 형태가 나와야함
-        em.persist(board); // insert 쿼리가 자동으로 돌게 됨
+        em.persist(board); // insert 쿼리가 자동으로 돌게 됨 //영속화
+        return board;
     }
 
     public Board findById(Long id) {

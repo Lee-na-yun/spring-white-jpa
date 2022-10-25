@@ -11,6 +11,8 @@ import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.User;
 import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
+import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto.UserDto;
 
 // 서비스의 역할
 // 1. 트랜잭션 관리
@@ -24,13 +26,24 @@ public class BoardService {
     private final UserRepository userRepository;
 
     @Transactional // 꼭 붙이기! jpa는 자동으로 트랜젝션이 안걸리기 때문
-    public void save(BoardSaveReqDto boardSaveReqDto) {
+    public BoardSaveRespDto save(BoardSaveReqDto boardSaveReqDto) {
         User userPS = userRepository.findById(boardSaveReqDto.getSessionUser().getId());
         Board board = new Board();
         board.setTitle(boardSaveReqDto.getTitle());
         board.setContent(boardSaveReqDto.getContent());
-        board.setUser(userPS);
-        boardRepository.save(board); // 여기서는 entity로 받아야함
+        board.setUser(userPS); // 영속화된 것 넣기
+        Board boardPS = boardRepository.save(board); // 여기서는 entity로 받아야함
+
+        BoardSaveRespDto boardSaveRespDto = new BoardSaveRespDto();
+        boardSaveRespDto.setId(boardPS.getId());
+        boardSaveRespDto.setTitle(boardPS.getTitle());
+        boardSaveRespDto.setContent(boardPS.getContent());
+        User user = boardPS.getUser();
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setUsername(user.getUsername());
+        boardSaveRespDto.setUser(userDto);
+        return boardSaveRespDto;
     }
 
     @Transactional(readOnly = true) // 세션 종료 안됨
