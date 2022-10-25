@@ -24,9 +24,9 @@ public class UserApiController {
     private final HttpSession session;
 
     @PostMapping("/join")
-    public ResponseEntity<?> save(@RequestBody JoinReqDto JoinReqDto) {
+    public ResponseDto<?> save(@RequestBody JoinReqDto JoinReqDto) {
         JoinRespDto joinRespDto = userService.save(JoinReqDto);
-        return new ResponseEntity<>(new ResponseDto<>(1, "ok", joinRespDto), HttpStatus.CREATED);
+        return new ResponseDto<>(1, "ok", joinRespDto);
     }
 
     @PostMapping("/login")
