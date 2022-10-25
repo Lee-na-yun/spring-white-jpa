@@ -15,9 +15,9 @@ public class UserRepository {
 
     public User save(User user) {
         // persistence Context에 영속화 시키기 ==> 자동 flush (트랙잭션 종료시)
-        System.out.println("ccc:" + user.getId());
+        System.out.println("ccc:" + user.getId()); // 영속화 전
         em.persist(user); // insert 쿼리가 자동으로 돌게 됨
-        System.out.println("ccc:" + user.getId());
+        System.out.println("ccc:" + user.getId()); // 영속화 후 (DB와 동기화한다.)
         return user;
     }
 
