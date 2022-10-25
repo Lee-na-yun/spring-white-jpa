@@ -8,10 +8,10 @@ public class BoardRequestDto {
 
     @Setter
     @Getter
-    public static class BoardSaveDto { // 게시글쓰기dto
+    public static class BoardSaveReqDto { // 게시글쓰기dto
         private String title;
         private String content;
-        private User user;
+        private User user; // 서비스 로직
     }
 
     // 필요한 dto는 이 파일에 추가로 작성하기!

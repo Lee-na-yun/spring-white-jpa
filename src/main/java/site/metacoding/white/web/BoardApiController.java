@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.User;
-import site.metacoding.white.dto.BoardRequestDto.BoardSaveDto;
+import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
 import site.metacoding.white.service.BoardService;
 
 import java.util.List;
@@ -43,20 +43,14 @@ public class BoardApiController {
         return "ok";
     }
 
-    @GetMapping("/board/{id}")
-    public Board findById(@PathVariable Long id) {
-        return boardService.findById(id);
-    }
-
     /*
-     * @PostMapping("/board")
-     * public String save(@RequestBody Board board) {
-     * boardService.save(board);
-     * return "ok";
+     * @GetMapping("/board/{id}")
+     * public Board findById(@PathVariable Long id) {
+     * return boardService.findById(id);
      * }
      */
 
-    @GetMapping("/v2/board/{id}")
+    @GetMapping("/board/{id}")
     public String findByIdV2(@PathVariable Long id) {
         System.out.println("현재 open-in-view는 true 인가 false 인가 생각해보기!!");
         Board boardPS = boardService.findById(id);
@@ -69,12 +63,12 @@ public class BoardApiController {
         return "ok";
     }
 
-    @PostMapping("/v2/board")
-    public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
+    @PostMapping("/board")
+    public String saveV2(@RequestBody BoardSaveReqDto boardSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
-        boardSaveDto.setUser(principal);
-        boardService.save(boardSaveDto); // 컨트롤러는 entity를 알 필요가 없으므로 dto 그대로 넘기기
-        return "ok";
+        boardSaveReqDto.setUser(principal);
+        boardService.save(boardSaveReqDto); // 컨트롤러는 entity를 알 필요가 없으므로 dto 그대로 넘기기
+        return "ok"; // 서비스에는 단 하나의 객체만 전달한다
     }
 
 }

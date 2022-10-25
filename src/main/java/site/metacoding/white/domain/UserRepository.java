@@ -13,9 +13,12 @@ public class UserRepository {
     // EntityManager = prepareStatement랑 비슷
     private final EntityManager em;
 
-    public void save(User user) {
+    public User save(User user) {
         // persistence Context에 영속화 시키기 ==> 자동 flush (트랙잭션 종료시)
+        System.out.println("ccc:" + user.getId());
         em.persist(user); // insert 쿼리가 자동으로 돌게 됨
+        System.out.println("ccc:" + user.getId());
+        return user;
     }
 
     public User findByUsername(String username) {
