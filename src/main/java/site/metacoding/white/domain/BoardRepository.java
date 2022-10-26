@@ -22,22 +22,38 @@ public class BoardRepository {
         return board;
     }
 
+    /*
+     * public Optional<Board> findById(Long id) {
+     * // Board boardPS = em
+     * // .createQuery("select b from Board b join fetch b.user u where b.id = :id",
+     * // Board.class)
+     * // .setParameter("id", id)
+     * // .getSingleResult();
+     * 
+     * Optional<Board> boardCP = Optional.of(em
+     * .createQuery("select b from Board b where b.id = :id", Board.class) // 간단한쿼리
+     * 작성할때 유용함(jpql)
+     * .setParameter("id", id)
+     * .getSingleResult());
+     * return boardCP;
+     * }
+     */
     public Optional<Board> findById(Long id) {
-        // Board boardPS = em
-        // .createQuery("select b from Board b join fetch b.user u where b.id = :id",
-        // Board.class)
-        // .setParameter("id", id)
-        // .getSingleResult();
+        try {
+            Optional<Board> boardOP = Optional.of(em
+                    .createQuery("select b from Board b where b.id = :id",
+                            Board.class)
+                    .setParameter("id", id)
+                    .getSingleResult());
+            return boardOP;
+        } catch (Exception e) {
+            return Optional.empty();
+        }
 
-        Optional<Board> boardCP = Optional.of(em
-                .createQuery("select b from Board b where b.id = :id", Board.class) // 간단한쿼리 작성할때 유용함(jpql)
-                .setParameter("id", id)
-                .getSingleResult());
-        return boardCP;
     }
 
     public void deleteById(Long id) {
-        em.createQuery("delete b from Board b where b.id = :id")
+        em.createQuery("delete b from Board b where b.id = :id", Board.class)
                 .setParameter("id", id)
                 .executeUpdate();
     }

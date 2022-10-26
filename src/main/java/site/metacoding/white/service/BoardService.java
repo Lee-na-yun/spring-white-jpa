@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.User;
@@ -26,6 +27,7 @@ import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto.UserDto;
 // 1. 트랜잭션 관리
 // 2. DTO 변환해서 컨트롤러에게 돌려줘야 함
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BoardService {
@@ -73,7 +75,14 @@ public class BoardService {
 
     @Transactional
     public void delete(Long id) {
-        boardRepository.deleteById(id);
+        // log.error("디버그:deletebyId 전");
+        Optional<Board> boardOP = boardRepository.findById(id);// 영속화 됨 => PC에 board가 들어가있음
+        if (boardOP.isPresent()) {
+            boardRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("해당" + id + "로 삭제 할 수 없습니다.");
+        }
+
     }
 
     @Transactional(readOnly = true)
