@@ -8,6 +8,7 @@ import site.metacoding.white.domain.User;
 import site.metacoding.white.dto.ResponseDto;
 import site.metacoding.white.dto.SessionUser;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.service.BoardService;
 
@@ -30,7 +31,7 @@ public class BoardApiController {
     private final HttpSession session;
 
     @GetMapping("/board")
-    public List<Board> findAll() {
+    public List<BoardAllRespDto> findAll() {
         return boardService.findAll();
     }
 

@@ -1,5 +1,6 @@
 package site.metacoding.white.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,9 @@ import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.User;
 import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardDetailRespDto;
+import site.metacoding.white.dto.BoardRespDto.BoardListRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto.UserDto;
 
@@ -69,7 +72,18 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    public List<Board> findAll() {
-        return boardRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<BoardAllRespDto> findAll() { // null을 체크할 필요 없음! 목록이 없으면 안나오면 되니까
+        List<Board> boardList = boardRepository.findAll();
+        List<BoardAllRespDto> boardAllRespDtoList = new ArrayList<>();
+        // 1. List의 크기만큼 for문 돌리기
+        for (Board board : boardList) {
+            boardAllRespDtoList.add(new BoardAllRespDto(board));
+        }
+        // 2. Board를 DTO로 옮기기 (BoardAllRespDto)
+        // 3. 이 DTO를 List에 담기
+
+        // return boardRepository.findAll(); // dto로 변경하기
+        return boardAllRespDtoList;
     }
 }
