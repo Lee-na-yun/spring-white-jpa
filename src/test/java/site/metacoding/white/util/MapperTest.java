@@ -3,12 +3,13 @@ package site.metacoding.white.util;
 import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //@NoArgsConstructor // 스프링에서 DB->rs->Entity 전략 : 디폴트 생성자를 호출한 뒤 setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @Setter
 @Getter
 class Product {
@@ -17,15 +18,33 @@ class Product {
     private Integer price;
     private Integer qty;
     private String mcp; // 제조사
+
+    @Builder
+    public Product(Integer id, String name, Integer price, Integer qty, String mcp) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.qty = qty;
+        this.mcp = mcp;
+    }
+
 }
 
-@AllArgsConstructor
+// @AllArgsConstructor
 @Setter
 @Getter
 class ProductDto {
     private String name;
     private Integer price;
     private Integer qty;
+
+    @Builder
+    public ProductDto(String name, Integer price, Integer qty) {
+        this.name = name;
+        this.price = price;
+        this.qty = qty;
+    }
+
 }
 
 public class MapperTest {
@@ -38,16 +57,30 @@ public class MapperTest {
     @Test
     public void 매핑하기1() {
         // 1. product 객체 생성
-        Product product = new Product(1, "사과", 1000, 2, "과일가게");
+        Product product = Product.builder()
+                .id(1)
+                .name("사과")
+                .price(1000)
+                .qty(2)
+                .mcp("과일가게")
+                .build();
 
         // 2. 값 넣기
 
         // 3. productDto 객체 생성
-        ProductDto productDto = new ProductDto(product.getName(), product.getPrice(), product.getQty());
+        ProductDto productDto = ProductDto.builder()
+                .name(product.getName())
+                .price(product.getPrice())
+                .qty(product.getQty())
+                .build();
 
         // 4. Product -> ProductDto로 옮기기
 
         // 5. ProductDto -> Product로 변경
-        Product p2 = new Product(null, productDto.getName(), productDto.getPrice(), productDto.getQty(), null);
+        Product p2 = Product.builder()
+                .name(productDto.getName())
+                .price(productDto.getPrice())
+                .qty(productDto.getQty())
+                .build();
     }
 }
