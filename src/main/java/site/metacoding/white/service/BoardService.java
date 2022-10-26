@@ -54,8 +54,13 @@ public class BoardService {
 
     @Transactional // select아니라서 붙여야함!
     public void update(Long id, Board board) {
-        Board boardPS = boardRepository.findById(id); // 영속화 됨 => PC에 board가 들어가있음
-        boardPS.update(board.getTitle(), board.getContent());
+        Optional<Board> boardOP = boardRepository.findById(id);// 영속화 됨 => PC에 board가 들어가있음
+        if (boardOP.isPresent()) {
+            boardOP.get().update(board.getTitle(), board.getContent());
+        } else {
+            throw new RuntimeException("해당" + id + "로 업데이트를 할 수 없습니다.");
+        }
+        // boardOP.update(board.getTitle(), board.getContent());
         // boardPS.setAuthor(board.getAuthor()); // 영속화된 데이터를 수정함
     } // 트랜잭션 종료시 ==> 더티체킹을 함
 
