@@ -38,11 +38,19 @@ class ProductDto {
     private Integer price;
     private Integer qty;
 
-    @Builder
-    public ProductDto(String name, Integer price, Integer qty) {
-        this.name = name;
-        this.price = price;
-        this.qty = qty;
+    // Product를 productDto로 변경하기
+    public ProductDto(Product product) {
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.qty = product.getQty();
+    }
+
+    public Product toEntity() {
+        return Product.builder()
+                .name(name)
+                .price(price)
+                .qty(qty)
+                .build();
     }
 
 }
@@ -68,19 +76,11 @@ public class MapperTest {
         // 2. 값 넣기
 
         // 3. productDto 객체 생성
-        ProductDto productDto = ProductDto.builder()
-                .name(product.getName())
-                .price(product.getPrice())
-                .qty(product.getQty())
-                .build();
+        ProductDto productDto = new ProductDto(product);
 
         // 4. Product -> ProductDto로 옮기기
 
         // 5. ProductDto -> Product로 변경
-        Product p2 = Product.builder()
-                .name(productDto.getName())
-                .price(productDto.getPrice())
-                .qty(productDto.getQty())
-                .build();
+        Product p2 = productDto.toEntity();
     }
 }
