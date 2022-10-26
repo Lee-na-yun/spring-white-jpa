@@ -49,7 +49,7 @@ public class BoardApiController {
     // 게시글 상세보기
     @GetMapping("/board/{id}")
     public ResponseDto<?> findById(@PathVariable Long id) {
-        return new ResponseDto<>(1, "ok", boardService.findById(id));
+        return new ResponseDto<>(1, "성공", boardService.findById(id));
     }
 
     /*
