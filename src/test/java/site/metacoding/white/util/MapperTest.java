@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor // 스프링에서 DB->rs->Entity 전략 : 디폴트 생성자를 호출한 뒤 setter
+//@NoArgsConstructor // 스프링에서 DB->rs->Entity 전략 : 디폴트 생성자를 호출한 뒤 setter
 @AllArgsConstructor
 @Setter
 @Getter
@@ -19,6 +19,7 @@ class Product {
     private String mcp; // 제조사
 }
 
+@AllArgsConstructor
 @Setter
 @Getter
 class ProductDto {
@@ -37,27 +38,16 @@ public class MapperTest {
     @Test
     public void 매핑하기1() {
         // 1. product 객체 생성
-        Product product = new Product();
+        Product product = new Product(1, "사과", 1000, 2, "과일가게");
 
         // 2. 값 넣기
-        product.setId(1);
-        product.setName("사과");
-        product.setPrice(1000);
-        product.setQty(2);
-        product.setMcp("과일가게");
 
         // 3. productDto 객체 생성
-        ProductDto productDto = new ProductDto();
+        ProductDto productDto = new ProductDto(product.getName(), product.getPrice(), product.getQty());
+
         // 4. Product -> ProductDto로 옮기기
-        productDto.setName(product.getName());
-        productDto.setPrice(product.getPrice());
-        productDto.setQty(product.getQty());
 
         // 5. ProductDto -> Product로 변경
-        Product p2 = new Product();
-        p2.setName(productDto.getName());
-        p2.setPrice(productDto.getPrice());
-        p2.setQty(productDto.getQty());
-
+        Product p2 = new Product(null, productDto.getName(), productDto.getPrice(), productDto.getQty(), null);
     }
 }
