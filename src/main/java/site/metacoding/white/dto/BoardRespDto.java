@@ -33,7 +33,35 @@ public class BoardRespDto {
             this.content = board.getContent();
             this.user = new UserDto(board.getUser());
         }
-
         // private User user; // SessionUser를 써도 됨
+    }
+
+    @Setter
+    @Getter
+    public static class BoardDetailRespDto {
+        private Long id;
+        private String title;
+        private String content;
+        private UserDto user;
+
+        @Setter
+        @Getter
+        public static class UserDto {
+            private Long id;
+            private String username;
+
+            public UserDto(User user) {
+                this.id = user.getId();
+                this.username = user.getUsername();
+            }
+        }
+
+        public BoardDetailRespDto(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.user = new UserDto(board.getUser());
+        }
+
     }
 }

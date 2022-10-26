@@ -1,6 +1,9 @@
 package site.metacoding.white.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.management.RuntimeErrorException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +14,7 @@ import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.User;
 import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardDetailRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto.UserDto;
 
@@ -38,11 +42,14 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true) // 세션 종료 안됨
-    public Board findById(Long id) {
-        Board boardPS = boardRepository.findById(id); // 오픈인뷰가 false니까 조회후 세션 종료
-        boardPS.getUser().getUsername(); // Lazy 로딩됨. ( Eager이면 이미 로딩되서 select 두번)
-        System.out.println("서비스단에서 지연로딩 함. 왜? 여기까지는 디비커넥션이 유지되니까!");
-        return boardPS;
+    public BoardDetailRespDto findById(Long id) {
+        Optional<Board> boardOP = boardRepository.findById(id); // 오픈인뷰가 false니까 조회후 세션 종료
+        if (boardOP.isPresent()) { // null이 없으면 (null값 체크)
+            BoardDetailRespDto boardDetailRespDto = new BoardDetailRespDto(boardOP.get());
+            return boardDetailRespDto;
+        } else {
+            throw new RuntimeException("해당" + id + "로 상세보기를 할 수 없습니다.");
+        }
     }
 
     @Transactional // select아니라서 붙여야함!
