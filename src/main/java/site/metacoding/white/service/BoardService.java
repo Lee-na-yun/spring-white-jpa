@@ -15,10 +15,11 @@ import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.User;
 import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRequestDto.BoardUpdateReqDto;
 import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardDetailRespDto;
-import site.metacoding.white.dto.BoardRespDto.BoardListRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
+import site.metacoding.white.dto.BoardRespDto.BoardUpdateRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto.UserDto;
 
 // 서비스의 역할
@@ -56,10 +57,13 @@ public class BoardService {
     }
 
     @Transactional // select아니라서 붙여야함!
-    public void update(Long id, Board board) {
+    public BoardUpdateRespDto update(BoardUpdateReqDto boardUpdateReqDto) {
+        Long id = boardUpdateReqDto.getId();
         Optional<Board> boardOP = boardRepository.findById(id);// 영속화 됨 => PC에 board가 들어가있음
         if (boardOP.isPresent()) {
-            boardOP.get().update(board.getTitle(), board.getContent());
+            Board boardPS = boardOP.get();
+            boardPS.update(boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+            return new BoardUpdateRespDto(boardPS);
         } else {
             throw new RuntimeException("해당" + id + "로 업데이트를 할 수 없습니다.");
         }

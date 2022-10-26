@@ -8,6 +8,7 @@ import site.metacoding.white.domain.User;
 import site.metacoding.white.dto.ResponseDto;
 import site.metacoding.white.dto.SessionUser;
 import site.metacoding.white.dto.BoardRequestDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRequestDto.BoardUpdateReqDto;
 import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.service.BoardService;
@@ -42,9 +43,9 @@ public class BoardApiController {
     }
 
     @PutMapping("/board/{id}")
-    public String update(@PathVariable Long id, @RequestBody Board board) { // dto가 아닌 entity로 받으면 나중에 힘들어짐!
-        boardService.update(id, board);
-        return "ok";
+    public ResponseDto<?> update(@PathVariable Long id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
+        boardUpdateReqDto.setId(id);
+        return new ResponseDto<>(1, "성공", boardService.update(boardUpdateReqDto));
     }
 
     // 게시글 상세보기
