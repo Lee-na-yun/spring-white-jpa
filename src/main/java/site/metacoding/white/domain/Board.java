@@ -1,5 +1,8 @@
 package site.metacoding.white.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +31,10 @@ public class Board {
     // FK가 만들어짐 = user_id
     @ManyToOne(fetch = FetchType.LAZY)
     private User user; // fk
+
+    // 조회를 위해서만 필요함! fk만들 수 없음
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY) // 관계의 주인 설정 (관계의 주인=comment의 board)
+    private List<Comment> Comment = new ArrayList<>();
 
     @Builder
     public Board(Long id, String title, String content, User user) {
