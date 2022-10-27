@@ -53,7 +53,7 @@ public class BoardRepository {
     }
 
     public void deleteById(Long id) {
-        em.createQuery("delete b from Board b where b.id = :id", Board.class)
+        em.createQuery("delete from Board b where b.id = :id", Board.class)
                 .setParameter("id", id)
                 .executeUpdate();
     }
