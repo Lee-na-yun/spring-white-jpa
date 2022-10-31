@@ -69,11 +69,13 @@ public class BoardApiControllerTest {
 
     // ---------------------- 여기까지 다 가짜 IOC에 뜸 -----------------------------//
 
-    /* @BeforeAll
-    public static void init() {
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-    } */
+    /*
+     * @BeforeAll
+     * public static void init() {
+     * headers = new HttpHeaders();
+     * headers.setContentType(MediaType.APPLICATION_JSON);
+     * }
+     */
 
     @BeforeEach // 트랜잭션 발동 시작
     public void sessionInit() {
@@ -113,8 +115,6 @@ public class BoardApiControllerTest {
         ResultActions resultActions = mvc
                 .perform(MockMvcRequestBuilders.get("/board/" + id).accept("application/json; charset=utf-8"));
 
-
-        
         // then
         MvcResult mvcResult = resultActions.andReturn();
         System.out.println("디버그 : " + mvcResult.getResponse().getContentAsString());
@@ -140,5 +140,6 @@ public class BoardApiControllerTest {
         // then
         MvcResult mvcResult = resultActions.andReturn();
         System.out.println("디버그 : " + mvcResult.getResponse().getContentAsString());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value("스프링1강"));
     }
 }
