@@ -36,6 +36,10 @@ public class Board {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY) // 관계의 주인 설정 (관계의 주인=comment의 board)
     private List<Comment> Comment = new ArrayList<>();
 
+    public void addComment(Comment comment) {
+        this.Comment.add(comment);
+    }
+
     @Builder
     public Board(Long id, String title, String content, User user) {
         this.id = id;
